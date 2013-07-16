@@ -1,0 +1,111 @@
+% ewic.tex for classfile V2.04, 6 July 2011
+
+\documentclass{ewic}
+%\documentclass[cm]{ewic}
+\usepackage{graphicx,wrapfig,subfig}
+
+\begin{document}
+
+\runningheads{Ferrari $\bullet$ Mazzanti $\bullet$ Spagnolo}{A demonstration of the deadlock free into subway line}
+
+\conference{Proceedings of  International Workshop on Verification and Evaluation of Computer and Communication Systems 2013}
+
+\title{A demonstration of the deadlock free into subway line[titoloprovvisorio]}
+
+\authorone{Alessio Ferrari\\
+ISTI-CNR\\
+via G. Moruzzi 1 \\56124 Pisa ITALY\\
+fmt.isti.cnr.it\\
+\email{alessio.ferrari@isti.cnr.it}}
+
+\authortwo{Franco Mazzanti\\
+ISTI-CNR\\
+via G. Moruzzi 1\\
+56124 Pisa ITALY\\
+fmt.isti.cnr.it\\
+\email{franco.mazzanti@isti.cnr.it}}
+
+\authorthree{Giorgio Oronzo Spagnolo\\
+ISTI-CNR\\
+via G. Moruzzi 1 \\
+56124 Pisa ITALY\\
+fmt.isti.cnr.it\\
+\email{giorgio.oronzo.spagnolo@isti.cnr.it}}
+
+
+\begin{abstract}
+This is an abstract.
+\end{abstract}
+
+\keywords{IXL, CBTC, Deadlock, UMC}
+
+\maketitle
+
+\section{Introduction}
+\input{intro}
+
+
+\section{Background}
+%\input{back}
+
+\section{Method overview}
+\input{over}
+
+\section{DeadLock Analysis}
+%\input{intro}
+
+\section{Related works}
+%\input{intro}
+\section{Conclusion}
+%\input{intro}
+
+
+\subsection{Notes}
+\begin{enumerate}
+\item Please separate multiple author surnames by a `\verb+$\bullet$+' within the
+\verb+\runningheads{}{}+ command.
+
+\pagebreak
+
+\item The class file is set up to handle up to six authors, i.e., \verb+\authorone{}...\authorsix{}+.
+
+\item Note that the required reference style is Harvard. ewic.cls
+uses `natbib.sty' to achieve the desired output so you will need
+to choose a natbib compatible .bst that gives Harvard style
+output. `chicago.bst' would be a good choice.
+
+\item Try to balance the columns on the final page when your paper is submitted.
+\end{enumerate}
+
+That really is all you should need to know to prepare your paper
+using ewic.cls.
+
+You do, of course, have the option to call in any of your
+favourite packages for setting maths, graphics, computer listings,
+etc.
+
+\textbf{Acknowledgments. }
+This work was partially supported by the PAR FAS 2007-2013 (TRACE-IT) project.
+
+%\begin{thebibliography}{9}
+%
+%\bibitem[Kopka and Daly(2004)]{KopkaDaly}
+%Kopka, H. and Daly, P.W.  (2004) \textit{A Guide to \LaTeXe:
+%Document Preparation for Beginners and Advanced Users} (4th~edn).
+%Addison-Wesley.
+%
+%\bibitem[Lamport(1994)]{Lamport}
+%Lamport L. (1994) \textit{\LaTeX: A Document Preparation System}
+%(2nd~edn). Addison-Wesley.
+%
+%\bibitem[Mittelbach and Goossens(2004)]{Companion}
+%Mittelbach, F. and Goossens, M., (2004) \textit{The \LaTeX\
+%Companion} (2nd~edn). Addison-Wesley.
+%
+%\end{thebibliography}
+
+\bibliographystyle{natbib}
+\bibliography{bibliography}
+
+
+\end{document}
