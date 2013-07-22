@@ -50,13 +50,37 @@ This is an abstract.
 
 \section{Background}
 %\input{back}
+Esistono sistemi ferroviari di segnamento e controllo specifici per le metropolitane. I sistemi metropolitani che presentiamo si chiamano Communicated-based Train Control (CBTC). I sistemi CBTC si basano sulle specifiche internazioni~\cite{ieee1474} ~\cite{cei2007}.
+
+Un sistema ferroviario è molto complesso ed diviso in diversi sotto-sistemi.
+Tra i principali che ne fanno parte troviamo: Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interloking (IXL) e Automatic Train Supervisor (ATS).
+
+ Automatic Train Protecion  si occupa di controllare o assegnare al treno l'autorizzazione alla marcia. Conoscendo la posizione dei treni sulla linea e la loro velocità. L'ATP calcola la curva di frenatura per garantire una sufficente separazione dei treni e controlla che il limite di velocità non sia superato. 
+ 
+ Automatic Train Operation, si occupa di sostituire il macchinista guidando automaticamente il treno.
+  
+ Interloking gestisce in sicurezza la linea e gli scambi permettendo o negando l'instradamento dei treni in accordo con le regole di sicurezza ferroviaria.
+  
+ Automatic Train Supervisor  supervisiona l'intera metropolitana, gestendo il traffico dei treni attraverso i limiti di velocità lo scheduling dei treni ed il loro routing.
+
+%timetable is a list of railway journeys arranged according to the time when they arrivals and departures
+Per timetable si intende una lista di orarii e di binarii per ogni treno, che indicando la partenza e l'arrivo del treno in ogni stazione.
+
+Per itinerario si indica un tratto di linea, di una stazione. Quando questo va dall'entrata della stazione al binario si chiama itinerario di ingresso, quando va dal binario all'uscita dalla stazione si chiama itinerari di uscita.
+
+Per missione si indica un servizio affidato ad un treno specifico, che contiene le informazioni riguardanti la stazione di partenza, le fermate da eseguire, in quali binari il treno deve fermasi, quale itineraio deve eseguire.
+ 
+In ambito metropolitano, al contrario di quanto accade nella ferrovia tradizione, molto spesso i binari in cui si fermano i treni sono definiti in maniera statica. Questo accade perchè i binari della metropolitana sono pensati prendere....
+
+Il deadlock ferroviario è una condizione in cui 2 o più treni non possono più procedere in sicurezza la loro missione prevista. Perché uno o più treni ne occupano il tragitto in direzione opposta.
+ 
 \begin{enumerate}
 \item Contesto ferroviario: Metropolitate CBTC
 \item Il sistema CBTC
 \item L'ATS il suo compito -> Routing vs TimeTable
 \item definizione di tabella orario 
 \item definizione di missione [statiche siamo in metro]
-\item sicurezza dei treni divisione della linea in blocchi
+\item sicurezza dei treni divisione della linea in blocchi[in un cbtc è vero?]
 \item definizione di itinerario 
 \item definizione di deadlock in un sistema ferroviario
 \end{enumerate}
