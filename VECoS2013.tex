@@ -50,49 +50,101 @@ This is an abstract.
 
 \section{Background}
 %\input{back}
-Esistono sistemi ferroviari di segnamento e controllo specifici per le metropolitane. I sistemi metropolitani che presentiamo si chiamano Communicated-based Train Control (CBTC). I sistemi CBTC si basano sulle specifiche internazioni~\cite{ieee1474} ~\cite{cei2007}.
+%Esistono sistemi ferroviari di segnalamento e controllo specifici per le metropolitane. I sistemi metropolitani che presentiamo si chiamano Communicated-based Train Control (CBTC). I sistemi CBTC si basano sulle specifiche internazionali
+There are railway signalling and train control systems specific to the metro systems. The metropolitan systems that we present are called Communicated-based Train Control (CBTC). CBTC systems are based on international specifications~\cite{ieee1474} ~\cite{cei2007}.
 
-Un sistema ferroviario è molto complesso ed diviso in diversi sotto-sistemi.
-Tra i principali che ne fanno parte troviamo: Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interloking (IXL) e Automatic Train Supervisor (ATS).
+%Il sistema CBTC è diviso in diversi sotto-sistemi. I seguenti sottosistemi fanno parte del sistema CBTC : Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interloking (IXL) e Automatic Train Supervisor (ATS).
+The CBTC system is divided into several sub-systems. The following subsystems are part of the CBTC system: Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interlocking (IXL) and Automatic Train Supervisor (ATS).
 
- Automatic Train Protecion  si occupa di controllare o assegnare al treno l'autorizzazione alla marcia. Conoscendo la posizione dei treni sulla linea e la loro velocità. L'ATP calcola la curva di frenatura per garantire una sufficente separazione dei treni e controlla che il limite di velocità non sia superato. 
+%L'Automatic Train Protecion conosce la posizione dei treni sulla linea e la loro velocità.  L'ATP calcola la curva di frenatura per garantire una sufficiente separazione dei treni e controlla che il limite di velocità non sia superato.  Il sistema calcola e assegna al treno l'autorizzazione al movimento. La MA è la distanza limite che un treno non può superare.  L'MA viene usata per garantire la separazione dei treni.
  
- Automatic Train Operation, si occupa di sostituire il macchinista guidando automaticamente il treno.
-  
- Interloking gestisce in sicurezza la linea e gli scambi permettendo o negando l'instradamento dei treni in accordo con le regole di sicurezza ferroviaria.
-  
- Automatic Train Supervisor  supervisiona l'intera metropolitana, gestendo il traffico dei treni attraverso i limiti di velocità lo scheduling dei treni ed il loro routing.
+The Automatic Train Protecion knows the position of trains on railway and their speed. The ATP calculates the braking curve in order to ensure a sufficient separation of trains and checks that the speed limit is not exceeded. The system calculates and assigns to the train the Movement Authority (MA). The MA is the limit distance that cannot be shortened by a running train. The MA is used to ensure separation of trains.
+ 
+ %Automatic Train Operation è un sistema che permette al treno la guida automatica, sostituendo il macchinista.
+ 
+The Automatic Train Operation is a system that allows the train driving automatically, replacing the driver.
+ 
+ %Interlocking gestisce in sicurezza la linea e gli scambi permettendo o negando l'instradamento dei treni in accordo con le regole di sicurezza ferroviaria.
+
+The Interlocking safely manages the railway and switches allowing or denying routing of trains in accordance with the rules of railway safety.
+%L'Automatic Train Supervisor  supervisiona l'intera metropolitana, gestendo il traffico dei treni attraverso i limiti di velocità lo scheduling dei treni ed il loro routing.
+
+The Automatic Train Supervisor supervises the entire subway managing train traffic, through, speed limits, scheduling and routing of trains.
+
+%i sistemi di sicurezza ferroviara impedisco ai treni di scontrarsi, ma non prevengono situazioni di stallo.
+%è di fondamentale importanza che i sistemi che gestiscono il traffico ferroviario, non causino delle sistuazioni di stallo o deaadlock.
+Railway safety systems prevent to trains of collide, but do not prevent deadlock. Therefore it is of fundamental importance that the systems that manage rail traffic, do not cause situations deadlock.
+
+%Il deadlock ferroviario è una condizione in cui 2 o più treni non possono più procedere in sicurezza la loro missione prevista. Perché uno o più treni ne occupano il tragitto in direzione opposta.
+The deadlock in the railway is a condition in which two or more trains can no longer safely proceed their planned mission. Because one or more trains will occupy the route in the opposite direction.
+
+%L'ATS quindi dovrà implementare un algoritmo di scheduling e routing che garantisca di non creare situazioni di deadlock. 
+%Per capire come impedire che il traffico ferroviario di andare in deadlock, introduciamo i seguenti termini specifici.
+
+The ATS will then implement a routing and scheduling algorithm that ensures do not create deadlock. In order to understand how prevent traffic from rail going to deadlock, we introduce the following specific terms.
 
 %timetable is a list of railway journeys arranged according to the time when they arrivals and departures
-Per timetable si intende una lista di orarii e di binarii per ogni treno, che indicando la partenza e l'arrivo del treno in ogni stazione.
+%La Timetable è una lista di orari e di binari per ogni treno, che indicano la partenza e l'arrivo del treno in ogni stazione.
 
-Per itinerario si indica un tratto di linea, di una stazione. Quando questo va dall'entrata della stazione al binario si chiama itinerario di ingresso, quando va dal binario all'uscita dalla stazione si chiama itinerari di uscita.
+The Timetable is a list of times and binaries for each train, which indicate the departure and the arrival of the train at each station.
 
-Per missione si indica un servizio affidato ad un treno specifico, che contiene le informazioni riguardanti la stazione di partenza, le fermate da eseguire, in quali binari il treno deve fermasi, quale itineraio deve eseguire.
+%Si presuppone che la timetable sia consistente, cioè che applicanto l'orario i treni non creeranno mai situazioni di deadlock. quindi queste posso crearsi solo in caso di ritardi dei treni.
+It is assumed that the timetable is consistent, that is, by applying the time the trains do not ever create deadlock situations. so these can be created only in the case of train delays.
+
+%L'Itinerario è un tratto di linea di una stazione. Quando questo va dall'entrata della stazione al binario di stazionamento si chiama itinerario di ingresso, quando va dal binario di stazionamento all'uscita dalla stazione si chiama itinerario di uscita.
+
+The Itinerary is a section of a railway line. When this goes from the entrance to the station to the platform is called ``route of entry'', when it goes from platform to the exit station is called ``route of output''.
+
+%La Missione è il servizio affidato ad un treno specifico, che contiene le informazioni riguardanti la stazione di partenza, le fermate da eseguire, in quali binari il treno deve fermasi, quali itinerai deve eseguire per entrare ed uscire dalle stazioni.
+
+The Mission is the service entrusted to a specific train, which contains information about the station of departure and arrival, scheduled stops, in which platform must compelled to stop, which routes must perform to enter and exit stations.
  
-In ambito metropolitano, al contrario di quanto accade nella ferrovia tradizione, molto spesso i binari in cui si fermano i treni sono definiti in maniera statica. Questo accade perchè i binari della metropolitana sono pensati prendere....
 
-Il deadlock ferroviario è una condizione in cui 2 o più treni non possono più procedere in sicurezza la loro missione prevista. Perché uno o più treni ne occupano il tragitto in direzione opposta.
+%In ambito metropolitano, al contrario di quanto accade nella ferrovia tradizione, molto spesso i binari in cui si fermano i treni sono definiti in maniera statica. Questo accade perchè i binari della metropolitana sono pensati prendere....
+
+In metropolitan railway, in contrast to what happens in the railroad tradition, very often binaries where trains stop are defined statically
  
-\begin{enumerate}
-\item Contesto ferroviario: Metropolitate CBTC
-\item Il sistema CBTC
-\item L'ATS il suo compito -> Routing vs TimeTable
-\item definizione di tabella orario 
-\item definizione di missione [statiche siamo in metro]
-\item sicurezza dei treni divisione della linea in blocchi[in un cbtc è vero?]
-\item definizione di itinerario 
-\item definizione di deadlock in un sistema ferroviario
-\end{enumerate}
+
+
+
+ 
+%\begin{enumerate}
+%\item Contesto ferroviario: Metropolitate CBTC
+%\item Il sistema CBTC
+%\item L'ATS il suo compito -> Routing vs TimeTable
+%\item definizione di tabella orario 
+%\item definizione di missione [statiche siamo in metro]
+%\item sicurezza dei treni 
+%\item definizione di itinerario 
+%\item definizione di deadlock in un sistema ferroviario
+%\end{enumerate}
 
 
 
 \subsection{Deadlock Pattern definition}
+
+\begin{figure}[htp]
+	\begin{centering}	
+	\includegraphics[width=0.45\textwidth, clip]{img/rappresentazione}
+	\caption{generic representation of a station}
+	\label{fig:rappresent}
+	\end{centering}
+\end{figure}
+
+
 \begin{itemize}
 \item definizione della rappresentazione usata
 \item definizione dei deadlock di base:
 \item dritto, cicolare o composizione dei precedenti
 \end{itemize}
+
+\begin{figure}[htp]
+	\begin{centering}	
+	\includegraphics[width=0.43\textwidth, clip]{img/deadlinear}
+	\caption{Linear Deadlock Pattern}
+	\label{fig:linardeadlock}
+	\end{centering}
+\end{figure}
 
 \section{Method overview}
 \input{over}
