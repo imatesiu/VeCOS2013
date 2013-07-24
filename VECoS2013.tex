@@ -3,6 +3,7 @@
 \documentclass{ewic}
 %\documentclass[cm]{ewic}
 \usepackage{graphicx,wrapfig,subfig}
+\usepackage{array}
 \begin{document}
 
 \runningheads{Ferrari $\bullet$ Mazzanti $\bullet$ Spagnolo}{A model checker solution for the deadlock free the subway}
@@ -51,7 +52,7 @@ This is an abstract.
 \section{Background}
 %\input{back}
 %Esistono sistemi ferroviari di segnalamento e controllo specifici per le metropolitane. I sistemi metropolitani che presentiamo si chiamano Communicated-based Train Control (CBTC). I sistemi CBTC si basano sulle specifiche internazionali
-There are railway signalling and train control systems specific to the metro systems. The metropolitan systems that we present are called Communicated-based Train Control (CBTC). CBTC systems are based on international specifications~\cite{ieee1474} ~\cite{cei2007}.
+There are railway signalling and train control systems specific to the metro systems. The metropolitan systems that we present are called Communicated-based Train Control (CBTC). CBTC systems are based on international specifications,~\cite{ieee1474} ~\cite{cei2007}.
 
 %Il sistema CBTC è diviso in diversi sotto-sistemi. I seguenti sottosistemi fanno parte del sistema CBTC : Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interloking (IXL) e Automatic Train Supervisor (ATS).
 The CBTC system is divided into several sub-systems. The following subsystems are part of the CBTC system: Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interlocking (IXL) and Automatic Train Supervisor (ATS).
@@ -75,8 +76,11 @@ The Automatic Train Supervisor supervises the entire subway managing train traff
 %è di fondamentale importanza che i sistemi che gestiscono il traffico ferroviario, non causino delle sistuazioni di stallo o deaadlock.
 Railway safety systems prevent to trains of collide, but do not prevent deadlock. Therefore it is of fundamental importance that the systems that manage rail traffic, do not cause situations deadlock.
 
-%Il deadlock ferroviario è una condizione in cui 2 o più treni non possono più procedere in sicurezza la loro missione prevista. Perché uno o più treni ne occupano il tragitto in direzione opposta.
-The deadlock in the railway is a condition in which two or more trains can no longer safely proceed their planned mission. Because one or more trains will occupy the route in the opposite direction.
+%Il deadlock ferroviario è una condizione in cui 2 o più treni non possono più continuare la loro missione prevista perchè ogni treno è bloccato da un'altro.
+%Una situazione in cui ogni treno è in attesa che un altro treno rilasci una risorsa in una catena circolare.
+In railway, the deadlock is a condition in which 2 or more trains cannot  continue their mission expected because each train is blocked by another one.
+A situation in which each train is waiting for another train releases a resource in a circular chain,~\cite{Pachl2012}.
+
 
 %L'ATS quindi dovrà implementare un algoritmo di scheduling e routing che garantisca di non creare situazioni di deadlock. 
 %Per capire come impedire che il traffico ferroviario di andare in deadlock, introduciamo i seguenti termini specifici.
@@ -86,10 +90,10 @@ The ATS will then implement a routing and scheduling algorithm that ensures do n
 %timetable is a list of railway journeys arranged according to the time when they arrivals and departures
 %La Timetable è una lista di orari e di binari per ogni treno, che indicano la partenza e l'arrivo del treno in ogni stazione.
 
-The Timetable is a list of times and binaries for each train, which indicate the departure and the arrival of the train at each station.
+The Timetable is a list of times and binaries for each train, which indicate the departure time and the arrival time of the train at each station.
 
 %Si presuppone che la timetable sia consistente, cioè che applicanto l'orario i treni non creeranno mai situazioni di deadlock. quindi queste posso crearsi solo in caso di ritardi dei treni.
-It is assumed that the timetable is consistent, that is, by applying the time the trains do not ever create deadlock situations. so these can be created only in the case of train delays.
+It is assumed that the timetable is consistent, respecting the time the trains do not ever create deadlock situations. So these can be created only in the case of train delays.
 
 %L'Itinerario è un tratto di linea di una stazione. Quando questo va dall'entrata della stazione al binario di stazionamento si chiama itinerario di ingresso, quando va dal binario di stazionamento all'uscita dalla stazione si chiama itinerario di uscita.
 
@@ -102,7 +106,7 @@ The Mission is the service entrusted to a specific train, which contains informa
 
 %In ambito metropolitano, al contrario di quanto accade nella ferrovia tradizione, molto spesso i binari in cui si fermano i treni sono definiti in maniera statica. Questo accade perchè i binari della metropolitana sono pensati prendere....
 
-In metropolitan railway, in contrast to what happens in the railroad tradition, very often binaries where trains stop are defined statically
+In metropolitan railway, in contrast to what happens in the railroad tradition, very often binaries where trains stop are defined statically.
  
 
 
@@ -123,28 +127,90 @@ In metropolitan railway, in contrast to what happens in the railroad tradition, 
 
 \subsection{Deadlock Pattern definition}
 
+In figura~\ref{fig:rappresent} è possibile vedere una rappresentazione di una generica stazione. 
+
+In particolare i cerchi con il numero romano rappresentano i binari di stazionamento, mentre gli altri rappresentano punti di ingresso alla stazione o di uscita.
+
+ Il segmento che unisce due cerchi rappresenta la linea ferroviaria. 
+ Due cerchi uniti da un segmento, tutti con lo stesso colore, rappresentano un itinerario. 
+ 
+ Il cerchio è colorato quando è presente un treno. La freccia dello stesso colore ne indica la direzione.
+
 \begin{figure}[htp]
 	\begin{centering}	
-	\includegraphics[width=0.45\textwidth, clip]{img/rappresentazione}
-	\caption{generic representation of a station}
+	\includegraphics[width=0.35\textwidth, clip]{img/rappresentazione}
+	\caption{Generic layout of a station}
 	\label{fig:rappresent}
 	\end{centering}
 \end{figure}
 
+Dallo studio dei deadlock ferroviari, abbiamo ricavato dei pattern di base. 
+La composizione di questi pattern permette di identificare tutti i possibili casi di deadlock.
 
-\begin{itemize}
-\item definizione della rappresentazione usata
-\item definizione dei deadlock di base:
-\item dritto, cicolare o composizione dei precedenti
-\end{itemize}
+Nella figura~\ref{fig:simpledeadlockpattern} sono disegnati i due pattern di base.
 
-\begin{figure}[htp]
-	\begin{centering}	
-	\includegraphics[width=0.43\textwidth, clip]{img/deadlinear}
-	\caption{Linear Deadlock Pattern}
-	\label{fig:linardeadlock}
-	\end{centering}
-\end{figure}
+Nel pattern di base~\ref{fig:lcrossdeadlock} è possibile vedere come entrambi i treni si blocchino a vicenda. Chiameremo questo genere di deadlock:  \emph{``line deadlock''}. Per eliminare questo deadlock bisogna impedire ad uno dei due treni di entrare in questa sezione critica in direzione opposta (es. purple e orange).
+
+Nel pattern ~\ref{fig:circledeadlock} la stazione è bloccata tutti i treni impedisco l'uno l'altro di muoversi. Chiameremo questo genere di deadlock:  \emph{``circle deadlock''}. Per eliminare questo deadlock bisogna impedire che i treni che sono presenti nel ring siamo al massimo N-1. Dove N è la somma dei punti di ingresso o uscita e dei binari di una stazione.
+
+\begin{figure}[!htp]
+ \centering
+
+ \subfloat[Linear Deadlock Pattern\label{fig:lcrossdeadlock}]{
+ \includegraphics [scale=0.45, clip]{img/deadlinear}
+ \label{fig:crossdeadlock}
+ }
+ \subfloat[Circle Deadlock Pattern\label{fig:lcircledeadlock}]{
+ \includegraphics [scale=0.5, clip]{img/circledead}
+ \label{fig:circledeadlock}
+ }
+ 
+
+\caption{Simple Deadlock Pattern}
+ \label{fig:simpledeadlockpattern}
+ \end{figure}
+
+
+Tutti gli altri tipi di deadlock sono riconducibili a composizioni di questi pattern di base.
+
+%\begin{itemize}
+%\item definizione della rappresentazione usata
+%\item definizione dei deadlock di base:
+%\item cross, cicolare o composizione dei precedenti
+%\end{itemize}
+
+%\begin{figure}[htp]
+%	\begin{centering}	
+%	\includegraphics[width=0.43\textwidth, clip]{img/deadlinear}
+%	\caption{Linear Deadlock Pattern}
+%	\label{fig:linardeadlock}
+%	\end{centering}
+%\end{figure}
+
+Nella figura~\ref{fig:compdeadlockpattern} sono rappresentati due pattern composti.
+
+In figura ~\ref{fig:linecircledeadlock} è disegnato un pattern composto da un ring e una linea. In questo caso abbio due zone critiche. Una rappresentata dagli elementi del circle, in questa zona non possono essere presenti più N-1 treni; Una globale rappresentata da tutto il pattern in cui al suo interno non devo essere presenti treni in linea in direzione opposta.
+
+
+\begin{figure}[!htp]
+ \centering
+
+ 
+  \subfloat[Linear and Circle Deadlock Pattern\label{fig:llinecircledeadlock}]{
+ \includegraphics [scale=0.5, clip]{img/linecircledead}
+ \label{fig:linecircledeadlock}
+ }
+ \\
+  \subfloat[Double Circle Deadlock Pattern\label{fig:lcircle2deadlock}]{
+ \includegraphics [scale=0.45, clip]{img/circle2dead}
+ \label{fig:circle2deadlock}
+ }
+
+\caption{Composite Deadlock Pattern}
+ \label{fig:compdeadlockpattern}
+ \end{figure}
+
+In figura ~\ref{fig:circle2deadlock}  è disegnato un pattern composto da 2 ring. In questo caso abbio tre zone critiche. Nelle zone critiche 1 e 2 possono circolare rispettivamente N-1 treni, quindi 3 e 3. Mentre globalmente nei due ring posso circolare ((N-1)+(N-1))-(M-1), dove M è il numero di ring nel pattern, quindi massimo 5 treni possono circolare nell'area critica globale.
 
 \section{Method overview}
 \input{over}
