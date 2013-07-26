@@ -140,7 +140,7 @@ The circle is colored when a train is present. Different colors indicates differ
 
 \begin{figure}[htp]
 	\begin{centering}	
-	\includegraphics[width=0.35\textwidth, clip]{img/rappresentazione}
+	\includegraphics[width=0.3\textwidth, clip]{img/rappresentazione}
 	\caption{Generic layout of a station}
 	\label{fig:rappresent}
 	\end{centering}
@@ -161,9 +161,9 @@ In Figure~\ref{fig:simpledeadlockpattern} are represented the basic pattern.
 
 In the basic pattern~\ref{fig:lcrossdeadlock} is possible to see how both trains block each other. We will call this type of deadlock: \emph{``linear deadlock''}. To eliminate this deadlock must prevent one of the two trains to enter this critical section in the opposite direction. In this section, all trains must move in the same direction.
 
-%Nel pattern ~\ref{fig:circledeadlock} è raffigurata una stazione. Tutti i treni impedisco l'uno l'altro di muoversi. Chiameremo questo genere di deadlock:  \emph{``circle deadlock''}. Per eliminare questo deadlock bisogna impedire che i treni che sono presenti nel ring siamo al massimo N-1. Dove N è la somma dei punti di ingresso o uscita e dei binari di una stazione.
+%Nel pattern ~\ref{fig:circledeadlock} è raffigurata una stazione. Tutti i treni impedisco l'uno l'altro di muoversi. Chiameremo questo genere di deadlock:  \emph{``circle deadlock''}. Per eliminare questo deadlock bisogna impedire che i treni che sono presenti nel ring siamo al massimo N-1. Dove N è la somma dei punti di ingresso o uscita e dei binari di una stazione. Nota: nei singoli segmenti del patter non devono essere presenti treni in direzione contrapposta.
 
-In pattern~\ref{fig:circledeadlock} is represented a ring. All trains block each other. We will call this type of deadlock:  \emph{``circle Deadlock''}. To eliminate this deadlock must prevent that the trains which are present in the ring are at most $N-1$. Where $N$ is the sum of the points of entry or exit and tracks platform of the station.
+In pattern~\ref{fig:circledeadlock} is represented a ring. All trains block each other. We will call this type of deadlock:  \emph{``circle Deadlock''}. To eliminate this deadlock must prevent that the trains which are present in the ring are at most $N-1$. Where $N$ is the sum of the points of entry or exit and tracks platform of the station. Note: in the individual segments of this patter must not be present trains in the opposite direction.
 
 \begin{figure}[!htp]
  \centering
@@ -236,6 +236,16 @@ In Figure ~\ref{fig:circle2deadlock} shows two circle pattern. We have three cri
 \input{over}
 
 \section{DeadLock Analysis}
+
+\begin{figure}[htp]
+	\begin{centering}	
+	\includegraphics[width=0.45\textwidth, clip]{img/esempio}
+	\caption{Layout of a simple subway}
+	\label{fig:example}
+	\end{centering}
+\end{figure}
+
+
 \begin{enumerate}
 \item introduzione del caso concreto
 \item presentazione layout dell'esempio
