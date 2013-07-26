@@ -1,5 +1,5 @@
  % ewic.tex for classfile V2.04, 6 July 2011
-
+%per compilare correttamente installare natbib.sty e chicago.bst
 \documentclass{ewic}
 %\documentclass[cm]{ewic}
 \usepackage{graphicx,wrapfig,subfig}
@@ -83,7 +83,7 @@ A situation in which each train is waiting for another train releases a resource
 
 
 %L'ATS quindi dovrà implementare un algoritmo di scheduling e routing che garantisca di non creare situazioni di deadlock. 
-%Per capire come impedire che il traffico ferroviario di andare in deadlock, introduciamo i seguenti termini specifici.
+%Per capire come impedire che il traffico ferroviario vada in deadlock, introduciamo i seguenti termini specifici.
 
 The ATS will then implement a routing and scheduling algorithm that ensures do not create deadlock. In order to understand how prevent traffic from rail going to deadlock, we introduce the following specific terms.
 
@@ -97,11 +97,11 @@ It is assumed that the timetable is consistent, respecting the time the trains d
 
 %L'Itinerario è un tratto di linea di una stazione. Quando questo va dall'entrata della stazione al binario di stazionamento si chiama itinerario di ingresso, quando va dal binario di stazionamento all'uscita dalla stazione si chiama itinerario di uscita.
 
-The Itinerary is a section of a railway line. When this goes from the entrance to the station to the platform is called ``route of entry'', when it goes from platform to the exit station is called ``route of output''.
+The Itinerary is a section of a railway line. When this goes from the entrance to the station to the tracks of the platform is called ``route of entry'', when it goes from tracks of the platform to the exit station is called ``route of output''.
 
 %La Missione è il servizio affidato ad un treno specifico, che contiene le informazioni riguardanti la stazione di partenza, le fermate da eseguire, in quali binari il treno deve fermasi, quali itinerai deve eseguire per entrare ed uscire dalle stazioni.
 
-The Mission is the service entrusted to a specific train, which contains information about the station of departure and arrival, scheduled stops, in which platform must compelled to stop, which routes must perform to enter and exit stations.
+The Mission is the service entrusted to a specific train, which contains information about the station of departure and arrival, scheduled stops, in which tracks of the platform must compelled to stop, which routes must perform to enter and exit stations.
  
 
 %In ambito metropolitano, al contrario di quanto accade nella ferrovia tradizione, molto spesso i binari in cui si fermano i treni sono definiti in maniera statica. Questo accade perchè i binari della metropolitana sono pensati prendere....
@@ -127,14 +127,16 @@ In metropolitan railway, in contrast to what happens in the railroad tradition, 
 
 \subsection{Deadlock Pattern definition}
 
-In figura~\ref{fig:rappresent} è possibile vedere una rappresentazione di una generica stazione. 
-
-In particolare i cerchi con il numero romano rappresentano i binari di stazionamento, mentre gli altri rappresentano punti di ingresso alla stazione o di uscita.
-
- Il segmento che unisce due cerchi rappresenta la linea ferroviaria. 
- Due cerchi uniti da un segmento, tutti con lo stesso colore, rappresentano un itinerario. 
- 
- Il cerchio è colorato quando è presente un treno. La freccia dello stesso colore ne indica la direzione.
+%In figura~\ref{fig:rappresent} è rappresentata di una generica stazione. 
+In Figure ~\ref{fig:rappresent} is represented by a generic station.
+%In particolare i cerchi con il numero romano rappresentano i binari di stazionamento, mentre gli altri rappresentano punti di ingresso o di uscita alla stazione.
+In particular, the circles with the Roman numeral representing the tracks of the platform, while the others circles represent points of entry or exit of the station.
+The segment that connects the two circles represents a tract of railway line.
+ %Il segmento che unisce i due cerchi rappresenta un tratto di linea ferroviaria. 
+  %[Due cerchi uniti da un segmento, tutti di colore rosso, rappresentano un itinerario. ]
+  [Two circles connected by a segment, all the same color, representing a route.]
+ %Il cerchio è colorato quando è presente un treno. Colori diversi indicano treni diversi. Il colore della freccia indica direzione del treno.
+The circle is colored when a train is present. Different colors indicates different trains. The color of the arrow indicates the direction of the train.
 
 \begin{figure}[htp]
 	\begin{centering}	
@@ -144,14 +146,24 @@ In particolare i cerchi con il numero romano rappresentano i binari di stazionam
 	\end{centering}
 \end{figure}
 
-Dallo studio dei deadlock ferroviari, abbiamo ricavato dei pattern di base. 
-La composizione di questi pattern permette di identificare tutti i possibili casi di deadlock.
+%Dallo studio dei deadlock ferroviari, abbiamo ricavato dei pattern di base. 
+%Questi pattern sono usati per riconosce le zone critiche della linea ferroviaria. In queste zone bisogna limitare il numero di treni che è possibile far circolare per evitare di finire in deadlock.
+%La composizione di pattern di base permette di identificare tutte le possibili zone in cui è possibile che si crei un deadlock.
 
-Nella figura~\ref{fig:simpledeadlockpattern} sono disegnati i due pattern di base.
+From the study of deadlock rail, we have obtained the basic pattern.
+These patterns are used to recognize the critical areas of the railway line. In these areas it is necessary to limit the number of trains that it is possible to circulate to avoid ending up in deadlock.
+The composition of the basic pattern allows to identify all the possible areas where you may create a deadlock.
 
-Nel pattern di base~\ref{fig:lcrossdeadlock} è possibile vedere come entrambi i treni si blocchino a vicenda. Chiameremo questo genere di deadlock:  \emph{``line deadlock''}. Per eliminare questo deadlock bisogna impedire ad uno dei due treni di entrare in questa sezione critica in direzione opposta (es. purple e orange).
+%Nella figura~\ref{fig:simpledeadlockpattern} sono disegnati i pattern di base.
+In Figure~\ref{fig:simpledeadlockpattern} are represented the basic pattern.
 
-Nel pattern ~\ref{fig:circledeadlock} la stazione è bloccata tutti i treni impedisco l'uno l'altro di muoversi. Chiameremo questo genere di deadlock:  \emph{``circle deadlock''}. Per eliminare questo deadlock bisogna impedire che i treni che sono presenti nel ring siamo al massimo N-1. Dove N è la somma dei punti di ingresso o uscita e dei binari di una stazione.
+%Nel pattern di base~\ref{fig:lcrossdeadlock} è possibile vedere come entrambi i treni si blocchino a vicenda. Chiameremo questo genere di deadlock:  \emph{``linear deadlock''}. Per eliminare questo deadlock bisogna impedire ad uno dei due treni di entrare in questa sezione critica in direzione opposta. %In questa sezione i treni devo circolare tutti nella stessa direzione.
+
+In the basic pattern~\ref{fig:lcrossdeadlock} is possible to see how both trains block each other. We will call this type of deadlock: \emph{``linear deadlock''}. To eliminate this deadlock must prevent one of the two trains to enter this critical section in the opposite direction. In this section, all trains must move in the same direction.
+
+%Nel pattern ~\ref{fig:circledeadlock} è raffigurata una stazione. Tutti i treni impedisco l'uno l'altro di muoversi. Chiameremo questo genere di deadlock:  \emph{``circle deadlock''}. Per eliminare questo deadlock bisogna impedire che i treni che sono presenti nel ring siamo al massimo N-1. Dove N è la somma dei punti di ingresso o uscita e dei binari di una stazione.
+
+In pattern~\ref{fig:circledeadlock} is represented a ring. All trains block each other. We will call this type of deadlock:  \emph{``circle Deadlock''}. To eliminate this deadlock must prevent that the trains which are present in the ring are at most $N-1$. Where $N$ is the sum of the points of entry or exit and tracks platform of the station.
 
 \begin{figure}[!htp]
  \centering
@@ -171,7 +183,9 @@ Nel pattern ~\ref{fig:circledeadlock} la stazione è bloccata tutti i treni impe
  \end{figure}
 
 
-Tutti gli altri tipi di deadlock sono riconducibili a composizioni di questi pattern di base.
+%Tutti gli altri tipi di deadlock sono riconducibili a composizioni di pattern di base.
+
+All other types of deadlocks are referable to compositions of basic pattern.
 
 %\begin{itemize}
 %\item definizione della rappresentazione usata
@@ -187,10 +201,14 @@ Tutti gli altri tipi di deadlock sono riconducibili a composizioni di questi pat
 %	\end{centering}
 %\end{figure}
 
-Nella figura~\ref{fig:compdeadlockpattern} sono rappresentati due pattern composti.
+%Nella figura~\ref{fig:compdeadlockpattern} sono rappresentati due pattern composti.
 
-In figura ~\ref{fig:linecircledeadlock} è disegnato un pattern composto da un ring e una linea. In questo caso abbio due zone critiche. Una rappresentata dagli elementi del circle, in questa zona non possono essere presenti più N-1 treni; Una globale rappresentata da tutto il pattern in cui al suo interno non devo essere presenti treni in linea in direzione opposta.
+In figure~\ref{fig:compdeadlockpattern} are presented two patterns compounds.
 
+%In figura ~\ref{fig:linecircledeadlock} è disegnato un pattern composto da un circle e una linea. Abbiamo tre zone critiche. Una rappresentata dagli elementi del circle, in questa zona non possono essere presenti più N-1 treni, N=4;  Una rappresentata dagli elementi della linea, in questa zona non possono essere presenti più di un treno nella stessa direzione.
+% Una zona critica globale rappresentata da tutto il pattern in cui al suo interno non devo essere presenti treni più di 3 treni, cioè il numero massimo di treni nel pattern circle.
+
+The figure~\ref{fig:linecircledeadlock}  shows a pattern composed of a ``circle pattern'' and a ``linear pattern''. We have three critical areas. The first is represented by the elements of the linear pattern in this area can not be more than one train in the same direction.  The second area is represented by elements of the circle in this area can not be more than $N-1$ trains, with $N=4$; in the main critical area, represented by all patterns,  there must be no more than three trains that is the maximum number of trains in the circle pattern.
 
 \begin{figure}[!htp]
  \centering
@@ -210,7 +228,9 @@ In figura ~\ref{fig:linecircledeadlock} è disegnato un pattern composto da un r
  \label{fig:compdeadlockpattern}
  \end{figure}
 
-In figura ~\ref{fig:circle2deadlock}  è disegnato un pattern composto da 2 ring. In questo caso abbio tre zone critiche. Nelle zone critiche 1 e 2 possono circolare rispettivamente N-1 treni, quindi 3 e 3. Mentre globalmente nei due ring posso circolare ((N-1)+(N-1))-(M-1), dove M è il numero di ring nel pattern, quindi massimo 5 treni possono circolare nell'area critica globale.
+%In figura ~\ref{fig:circle2deadlock}  è disegnato un pattern composto da 2 ring. Abbiamo tre zone critiche. Nelle zone critiche 1 e 2 possono circolare rispettivamente N-1 treni, quindi 3 e 3. Mentre globalmente nei due ring posso circolare ((N-1)+(N-1))-(M-1), dove M è il numero di pattern, quindi massimo 5 treni possono circolare nell'area critica globale.
+
+In Figure ~\ref{fig:circle2deadlock} shows two circle pattern. We have three critical areas. In the critical area one and two can circulate respectively N-1 trains, then three and three. While globally in the two circular ring can circulate $[(N-1) + (N-1)] - (M-1)=5$, where $M$ is the number of patterns, so maximum five trains may run in the main critical area.
 
 \section{Method overview}
 \input{over}
