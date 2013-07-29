@@ -51,15 +51,26 @@ This is an abstract.
 
 \section{Background}
 %\input{back}
-%Esistono sistemi ferroviari di segnalamento e controllo specifici per le metropolitane. I sistemi metropolitani che presentiamo si chiamano Communicated-based Train Control (CBTC). I sistemi CBTC si basano sulle specifiche internazionali
+%Esistono sistemi ferroviari di segnalamento e controllo specifici per le metropolitane. I sistemi metropolitani che presentiamo si chiamano Communicated-based Train Control (CBTC).
+%Il sistema CBTC è particormente innovativo perchè riceve dai la loro posizione esatta, tramite sistemi wireless. Il sistema è quindi in grado di stabilire delle aeree mobili di sicurezza, al contrario dei vecchi sistemi che utilizzano aree fisse.
+
+% I sistemi CBTC si basano sulle specifiche internazionali
 There are railway signalling and train control systems specific to the metro systems. The metropolitan systems that we present are called Communicated-based Train Control (CBTC). CBTC systems are based on international specifications,~\cite{ieee1474} ~\cite{cei2007}.
+
+The conventional metro signalling/control systems the Track circuits are used to detect the presence of trains. Wayside signals are used to ensure safe routes and to provide information to the trains. Therefore, the position of the train is based on the accuracy of the track circuit, and the information provided to the train is limited to the one provided by the wayside signals. These systems are normally referred as \emph{fixed block} systems, since the distance between trains is computed based on fixed-length sections (i.e., the length of a track circuit).
+
+%CBTC overcomes these problems through a continuous wayside-to-train and train-to-wayside data communication. In this way, train position detection is provided by the onboard equipment with a high precision. Furthermore, much more control and status information can be provided to the train. Currently, most of CBTC systems implement this communication using radio transmission~\cite{Kuun2004}. 
+
+The fundamental characteristic of CBTC is to ensure a reduction of the distance between two trains running in the same direction (this distance is normally called \emph{headway}). This is possible thanks to the \emph{moving block} principle: the minimum distance between successive trains is no longer calculated based on fixed sections, as occurs in presence of track circuits, but according to the rear of the preceding train with the addition of a safety distance as a margin. This distance is the limit distance (MA, Movement Authority) that cannot be shortened by a running train. 
+
 
 %Il sistema CBTC è diviso in diversi sotto-sistemi. I seguenti sottosistemi fanno parte del sistema CBTC : Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interloking (IXL) e Automatic Train Supervisor (ATS).
 The CBTC system is divided into several sub-systems. The following subsystems are part of the CBTC system: Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interlocking (IXL) and Automatic Train Supervisor (ATS).
 
 %L'Automatic Train Protecion conosce la posizione dei treni sulla linea e la loro velocità.  L'ATP calcola la curva di frenatura per garantire una sufficiente separazione dei treni e controlla che il limite di velocità non sia superato.  Il sistema calcola e assegna al treno l'autorizzazione al movimento. La MA è la distanza limite che un treno non può superare.  L'MA viene usata per garantire la separazione dei treni.
  
-The Automatic Train Protecion knows the position of trains on railway and their speed. The ATP calculates the braking curve in order to ensure a sufficient separation of trains and checks that the speed limit is not exceeded. The system calculates and assigns to the train the Movement Authority (MA). The MA is the limit distance that cannot be shortened by a running train. The MA is used to ensure separation of trains.
+The Automatic Train Protecion knows the position of trains on railway and their speed. The ATP calculates the braking curve in order to ensure a sufficient separation of trains and checks that the speed limit is not exceeded. The system calculates and assigns to the train the Movement Authority (MA). %The MA is the limit distance that cannot be shortened by a running train. 
+The MA is used to ensure separation of trains.
  
  %Automatic Train Operation è un sistema che permette al treno la guida automatica, sostituendo il macchinista.
  
@@ -131,7 +142,7 @@ In metropolitan railway, in contrast to what happens in the railroad tradition, 
 In Figure ~\ref{fig:rappresent} is represented by a generic station.
 %In particolare i cerchi con il numero romano rappresentano i binari di stazionamento, mentre gli altri rappresentano punti di ingresso o di uscita alla stazione.
 In particular, the circles with the Roman numeral representing the tracks of the platform, while the others circles represent points of entry or exit of the station.
-The segment that connects the two circles represents a tract of railway line.
+The segment that connects the two circles represents a track of railway line.
  %Il segmento che unisce i due cerchi rappresenta un tratto di linea ferroviaria. 
   %[Due cerchi uniti da un segmento, tutti di colore rosso, rappresentano un itinerario. ]
   [Two circles connected by a segment, all the same color, representing a route.]
@@ -161,9 +172,9 @@ In Figure~\ref{fig:simpledeadlockpattern} are represented the basic pattern.
 
 In the basic pattern~\ref{fig:lcrossdeadlock} is possible to see how both trains block each other. We will call this type of deadlock: \emph{``linear deadlock''}. To eliminate this deadlock must prevent one of the two trains to enter this critical section in the opposite direction. In this section, all trains must move in the same direction.
 
-%Nel pattern ~\ref{fig:circledeadlock} è raffigurata una stazione. Tutti i treni impedisco l'uno l'altro di muoversi. Chiameremo questo genere di deadlock:  \emph{``circle deadlock''}. Per eliminare questo deadlock bisogna impedire che i treni che sono presenti nel ring siamo al massimo N-1. Dove N è la somma dei punti di ingresso o uscita e dei binari di una stazione. Nota: nei singoli segmenti del patter non devono essere presenti treni in direzione contrapposta.
+%Nel pattern ~\ref{fig:circledeadlock} è raffigurata una stazione. Tutti i treni impedisco l'uno l'altro di muoversi. Chiameremo questo genere di deadlock:  \emph{``circle deadlock''}. Per eliminare questo deadlock bisogna impedire che i treni che sono presenti nel ring siamo al massimo N-1. Dove N è la somma dei punti di ingresso o uscita e dei binari di una stazione. Nota: nei singoli segmenti del patter non devono essere presenti treni in direzione contrapposta. i treni  che si trovano al margine del ring e ne stanno uscendo sono ininfluenti
 
-In pattern~\ref{fig:circledeadlock} is represented a ring. All trains block each other. We will call this type of deadlock:  \emph{``circle Deadlock''}. To eliminate this deadlock must prevent that the trains which are present in the ring are at most $N-1$. Where $N$ is the sum of the points of entry or exit and tracks platform of the station. Note: in the individual segments of this patter must not be present trains in the opposite direction.
+In pattern~\ref{fig:circledeadlock} is represented a ring. All trains block each other. We will call this type of deadlock:  \emph{``circle Deadlock''}. To eliminate this deadlock must prevent that the trains which are present in the ring are at most $N-1$. Where $N$ is the sum of the points of entry or exit and tracks platform of the station. Note: in the individual segments of this patter must not be present trains in the opposite direction. Note2: the trains that are located at the edge of the ring and they are coming out are irrelevant.
 
 \begin{figure}[!htp]
  \centering
