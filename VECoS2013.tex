@@ -3,7 +3,11 @@
 \documentclass{ewic}
 %\documentclass[cm]{ewic}
 \usepackage{graphicx,wrapfig,subfig}
+ \usepackage{verbatim}
 \usepackage{array}
+
+
+
 \begin{document}
 
 \runningheads{Ferrari $\bullet$ Mazzanti $\bullet$ Spagnolo}{A model checker solution for the deadlock free the subway}
@@ -247,6 +251,91 @@ In Figure ~\ref{fig:circle2deadlock} shows two circle pattern. We have three cri
 \input{over}
 
 \section{DeadLock Analysis}
+
+Nel modello UMC ad ogni binario di stazione ed ad ogni punto di ingresso o d'uscita dalla stazioni viene associato un numero univoco nella rete ferroviaria.
+
+La missione del treno è rappresentata da un vettore che contiene la seguenza di tratte della linea per poter eseguire la missione.
+
+\makeatletter
+\newbox\sf@box
+\newenvironment{SubFloat}[2][]%
+{\def\sf@one{#1}%
+\def\sf@two{#2}%
+\setbox\sf@box\hbox
+\bgroup}%
+{ \egroup
+\ifx\@empty\sf@two\@empty\relax
+\def\sf@two{\@empty}
+\fi
+\ifx\@empty\sf@one\@empty\relax
+\subfloat[\sf@two]{\box\sf@box}%
+\else
+\subfloat[\sf@one][\sf@two]{\box\sf@box}%
+\fi}
+\makeatother
+
+\begin{figure}[!htp]
+ %\centering
+
+ 
+  \begin{SubFloat}{\label{fig:lmissionm}Mission Model}
+  
+  \begin{minipage}{2.9in}
+\begin{verbatim}
+red={1,4,5,7,8,9,10,12,13,14}; pos1=1;
+blue={2,4,5,7,8,9,10,12,13,15}; pos2=2;
+gold={3,4,5,7,8,9,10,12,13,16}; pos3=3;
+
+purple={14,13,12,11,9,8,7,6,4,1}; pos4=14;
+yellow={15,13,12,11,9,8,7,6,4,2}; pos5=15;
+green={16,13,12,11,9,8,7,6,4,3}; pos6=16;
+
+\end{verbatim}
+\end{minipage}%
+  
+
+\label{fig:missionm}
+\end{SubFloat}
+ 
+ \begin{SubFloat}{Initial state line\label{fig:lstateline}}
+  \centering
+\verb|status={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}|
+ \label{fig:stateline}
+\end{SubFloat}
+
+\caption{Scheduling Model}
+ \label{fig:SchedulingModel}
+ \end{figure}
+
+
+%\begin{figure}[htp]
+%
+%
+%\centering
+%\verb|red={1,4,5,7,8,9,10,12,13,14}; pos1=1;|
+%\verb|blue={2,4,5,7,8,9,10,12,13,15}; pos2=2;|
+%\verb|gold={3,4,5,7,8,9,10,12,13,16}; pos3=3;|
+%
+%\verb|purple={14,13,12,11,9,8,7,6,4,1}; pos4=14;|
+%\verb|yellow={15,13,12,11,9,8,7,6,4,2}; pos5=15;|
+%\verb|green={16,13,12,11,9,8,7,6,4,3}; pos6=16;|
+%\caption{Mission Model}
+%\label{fig:missionm}
+%
+%\end{figure}
+
+Lo stato della linea è rapprensentato tramite un vettore di 16 posizioni, dove la posizione i è libera se il valore è uguale a 0. Mentre se diversa da 0, rappresenta il numero del treno che occupa quella tratta.
+%
+%\begin{figure}[htp]
+%
+%
+%\centering
+%\verb|status={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}|
+%
+%\caption{Initial state line}
+%\label{fig:stateline}
+%
+%\end{figure}
 
 \begin{figure}[htp]
 	\begin{centering}	
