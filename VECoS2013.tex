@@ -67,7 +67,7 @@
 			\section{Introduction}
 			\input{intro}
 			[studio preliminare]
-			
+			[ricorda: la complessita della gestione (ats) di una metro: quindi la necessita di sistemi automatici]
 			
 			\section{Background}
 			%\input{back}
@@ -85,7 +85,7 @@
 			
 			
 			%Il sistema CBTC è diviso in diversi sotto-sistemi. I seguenti sottosistemi fanno parte del sistema CBTC : Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interloking (IXL) e Automatic Train Supervisor (ATS).
-			The CBTC system is divided into several sub-systems. The following subsystems are part of the CBTC system: Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interlocking (IXL) and Automatic Train Supervisor (ATS).
+			The functions of CBTC system are implemented by several sub-systems. The following subsystems are part of the CBTC system: Automatic Train Protecion (ATP), Automatic Train Operation (ATO), Interlocking (IXL) and Automatic Train Supervisor (ATS).
 			
 			%L'Automatic Train Protecion conosce la posizione dei treni sulla linea e la loro velocità.  L'ATP calcola la curva di frenatura per garantire una sufficiente separazione dei treni e controlla che il limite di velocità non sia superato.  Il sistema calcola e assegna al treno l'autorizzazione al movimento. La MA è la distanza limite che un treno non può superare.  L'MA viene usata per garantire la separazione dei treni.
 			 
@@ -94,7 +94,7 @@
 			 
 			 %Automatic Train Operation è un sistema che permette al treno la guida automatica, sostituendo il macchinista.
 			 
-			The Automatic Train Operation is a system that allows the train driving automatically, replacing the driver.
+			The Automatic Train Operation is a system that allows the automatic train driving, replacing the driver (driverless). The trains run automatically from station to station.
 			 
 			 %Interlocking gestisce in sicurezza la linea e gli scambi permettendo o negando l'instradamento dei treni in accordo con le regole di sicurezza ferroviaria.
 			
@@ -263,12 +263,12 @@
 			
 			In Figure ~\ref{fig:circle2deadlock} shows two circle pattern. We have three critical areas. In the critical area one and two can circulate respectively $N-1$ trains, then three and three. While globally in the two circles can circulate $[(N-1) + (N-1)] - (M-1)=5$, where $M$ is the number of patterns, so maximum five trains may run in the main critical area.
 			
-			\section{Method overview}
+			\section{Method overview}\label{sec:method}
 			\input{over}
 			
 			\section{DeadLock Analysis}
 Di seguito analizzeremo il caso della metropolitana in figura~\ref{fig:example}. 
-Questo layout è quello usato per il progetto TRACE-IT.
+Questo layout è quello usato per il progetto italiano Train Control Enhancement via Information Technology (TRACE-IT), project funded by the Tuscany Region under the programme PAR FAS 2007–2013, for the study of systems for railway signaling.
 %Dati il layout di una metropolitana e la tabella orario dei treni che si vogliono far circolare. Viene definito il modello delle missioni dei singoli treni. Il modello delle missioni unito al modello dello stato della linea formano il modello di scheduling del sistema. 
 
 			\begin{figure*}[htp]
@@ -280,9 +280,12 @@ Questo layout è quello usato per il progetto TRACE-IT.
 			\end{figure*}
 
 		
-			Nel modello UMC ad ogni binario di stazione ed ad ogni punto di ingresso o d'uscita dalla stazioni viene associato un numero univoco nella rete ferroviaria.
+			Nel modello UMC ad ogni binario di stazione ed ad ogni punto di ingresso o d'uscita dalle stazioni viene associato un numero univoco nella rete ferroviaria, see figura~\ref{fig:example}.
+			Da una analisi preliminare del layout della metropolitana si possono già individuare facilmente alcune possibili aree critiche. Ma alcune di queste aree critiche potrebbero non essere mai interessate da situazioni di deadlock, perchè questo dipende anche dalle missioni dei treni. Prima di delimitare le aree critiche creami il modello di scheduling e analizziamolo con il model checker.
 			
+			Il modello di scheduling, see section~\ref{sec:method} è composto dalle missioni dei treni e tallo stato iniziale della linea metropolitana.
 			La missione del treno è rappresentata da un vettore che contiene la seguenza di tratte della linea (itinerari) per poter eseguire la missione, la posizione iniziale del treno e il Train Running Number\footnote{The train running number is a unique number used to identify a train on a specific mission.} (TRN) del treno see figure~\ref{fig:lmissionm}.
+			In questa simulazione vengono usati otto treni, posti agli estremi della linea ferroviaria. 
 			
 			\begin{figure}[!htp]
 			 \centering
@@ -319,10 +322,44 @@ Questo layout è quello usato per il progetto TRACE-IT.
 			 \end{figure}
 			
 			
-			Lo stato della linea è rapprensentato tramite un vettore di 32 posizioni, dove la posizione i è libera se il valore è uguale a 0. Mentre se diversa da 0, rappresenta il numero del treno che occupa quella tratta, see figure~\ref{fig:lstateline}.
+			Lo stato iniziale della linea è rapprensentato tramite un vettore di $32$ posizioni, dove la posizione $i$ è libera se il valore è uguale a $0$. Mentre se diversa da $0$, rappresenta il numero del treno che occupa quella tratta, see figure~\ref{fig:lstateline}.
 	
 			
+		
+			\begin{figure}[htp]
+				\begin{centering}	
+				\includegraphics[scale=0.25]{img/esempioSplit}
+				\caption{Splitting railway}
+				\label{fig:split}
+				\end{centering}
+			\end{figure}	
 			
+			
+			\begin{figure}[htp]
+				\begin{centering}	
+				\includegraphics[scale=0.35]{img/esempioScomp1}
+				\caption{Splitting railway}
+				\label{fig:scomposizione1}
+				\end{centering}
+			\end{figure}
+			
+			
+			\begin{figure}[htp]
+				\begin{centering}	
+				\includegraphics[scale=0.35]{img/esempioScomp2}
+				\caption{Splitting railway}
+				\label{fig:scomposizione2}
+				\end{centering}
+			\end{figure}
+			
+			
+			\begin{figure}[htp]
+				\begin{centering}	
+				\includegraphics[scale=0.35]{img/esempioScomp3}
+				\caption{Splitting railway}
+				\label{fig:scomposizione3}
+				\end{centering}
+			\end{figure}
 			
 			\begin{figure*}[htp]
 				\begin{centering}	
