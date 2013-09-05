@@ -15,36 +15,47 @@ Our approach is based on an iterative model checker to verify the presence of de
 
 \begin{figure}[h!]
 	\begin{centering}	
-	\includegraphics[width=0.45\textwidth, clip]{img/processo}
-	\caption{Overview of the approach}
-	\label{fig:process}
+	\includegraphics[width=0.45\textwidth, clip]{img/processo1}
+	\caption{Overview of the approach: Part I}
+	\label{fig:process1}
 	\end{centering}
 \end{figure}
 
-%La figura~\ref{fig:process} descrive graficamente l'approccio usato.
-The figure ~\ref{fig:process} describes the approach used.
+%La figura~\ref{fig:process} descrivono graficamente l'approccio usato.
+The figures ~\ref{fig:process1} ~\ref{fig:process2} describe the approach used to verify if the deadlock are presented.
 
 %%Nella prima fase, che chiamiamo SLP, vengo preparati i dati per effettuare l'analisi di deadlock della linea.
 %I dati di partenza sono  il layout della metropolitana e la tabella orario dei treni che si vogliono far circolare. Questi dati sono usati per definire i modelli delle missioni dei singoli treni. 
-
-The source data are the subway  layout and the metro timetable. Both are used to define models of the missions of individual trains, see figure~\ref{fig:lmissionm}.
+The figure~\ref{fig:process1} describe the definition of the scheduling model for the next part of the our method.
+The source data, for this part, are the subway  layout and the metro timetable. Both are used to define models of the missions of individual trains into the rail network, see figure~\ref{fig:example} and table ~\ref{tab:timetalbe}.
 
 
 %Invece il layout della metropolitana viene usato anche per definire lo stato iniziale della linea. Cosi è possibile bloccare alcuni tratti di metropolitana perchè impegnati ad esempio da lavori di manutenzione.
 
-Whereas the layout of the subway is also used to define the initial state of the line, see figure~\ref{fig:lstateline}. So you can lock some parts of the subway because it involved such as maintenance or insert the initial position of train.
+The layout of the subway is also used to define the initial state of the line.This consists of the initial position of the trains and it is also possible lock some parts of the subway because it involved such as maintenance or insert the initial position of train.
 
 %I modelli di missione e lo stato iniziale della metropolitana costituiscono il modello di scheduling della metropolitana.
 
 The models of the mission and the model initial state of the subway they represent the model of scheduling of the subway, see figure~\ref{fig:SchedulingModel}.
 
+
+\begin{figure}[h!]
+	\begin{centering}	
+	\includegraphics[width=0.45\textwidth, clip]{img/processo2}
+	\caption{Overview of the approach: Part II}
+	\label{fig:process2}
+	\end{centering}
+\end{figure}
+
+The figure~\ref{fig:process2} see second part of our approach to verify the absence of deadlock into model. 
 %Il modello di scheduling viene analizzato tramite il model checker UMC[inserire riferimento]
-The scheduling model is analyzed using the model checker UMC [insert reference]
+The scheduling model is analyzed using the model checker UMC~\cite{mazzanti2010}.
 %UMC permette di specificare come un insime di statecharts UML e di verificare proprità relative all'evoluzione del sistema. 
 UMC allows to specify a system as a set of UML Statecharts and verify properties related to the evolution of the system.
-
+[regole di transizione del MC]
 %Se risultato del modelchecker è controesempio di deadlock. Si identificano i pattern di deadlock e si inserisco delle nuove regole nelle aree scritiche identificate. Altrimenti potremo affermare che il modello è libero di deadlock.
 
-If the result of the model checker is deadlock counter example we identify patterns of deadlocks and insert the new contraints in the critical areas identified, see section~\ref{sec:deadlockpatterndefinition}. Otherwise, we can conclude that the model is free of deadlocks. 
+If the result of the model checker is deadlock counter example we identify patterns of deadlocks and insert the new constraints in the critical areas identified, see section~\ref{sec:back}. Otherwise, we can conclude that the model is free of deadlocks. 
 %Quindi tutti i treni sono ingrado di arrivare a destinazione senza generare deadlock.
-So all the trains, present into timetable, are able to arrive at your destination without generating deadlock.
+So all the trains, present into timetable, are able to arrive at destination without generating deadlock.
+In some case is not able to calculate a result, because the model is too complex, in the case is  possible to split the layout of subway. This is not always possible, in the following sections, we will explain when it is possible to split the layout.

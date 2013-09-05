@@ -3,9 +3,9 @@
 			\documentclass{ewic}
 			%\documentclass[cm]{ewic}
 			\usepackage{graphicx,wrapfig,subfig}
-			 \usepackage{verbatim}
+			 \usepackage{verbatim,fixltx2e}
 			\usepackage{array}
-			
+			\usepackage{multirow}
 					\makeatletter
 			\newbox\sf@box
 			\newenvironment{SubFloat}[2][]%
@@ -30,7 +30,7 @@
 			
 			\conference{Proceedings of  International Workshop on Verification and Evaluation of Computer and Communication Systems 2013}
 			
-			\title{A model checker solution for the deadlock free the subway[tp]}
+			\title{A model checker solution for a deadlock free subway[tp]}
 			
 			\authorone{Alessio Ferrari\\
 			ISTI-CNR\\
@@ -68,8 +68,8 @@
 			\input{intro}
 			[studio preliminare]
 			[ricorda: la complessita della gestione (ats) di una metro: quindi la necessita di sistemi automatici]
-			
-			\section{Background}
+			[[problem statement] riuscire che dato un certo numero di missioni e un layout a dimostrare che queste non formino mai dei deadlock]]
+			\section{Background}\label{sec:back}
 			%\input{back}
 			%Esistono sistemi ferroviari di segnalamento e controllo specifici per le metropolitane. I sistemi metropolitani che presentiamo si chiamano Communicated-based Train Control (CBTC).
 			%Il sistema CBTC è particormente innovativo perchè riceve dai la loro posizione esatta, tramite sistemi wireless. Il sistema è quindi in grado di stabilire delle aeree mobili di sicurezza, al contrario dei vecchi sistemi che utilizzano aree fisse.
@@ -154,25 +154,27 @@
 			%\item definizione di deadlock in un sistema ferroviario
 			%\end{enumerate}
 			
+			\section{Method overview}\label{sec:method}
+			\input{over}
 			
-			
-			\subsection{Deadlock Pattern definition}\label{sec:deadlockpatterndefinition}
+		\section{Deadlock Pattern definition}\label{sec:deadlockpatterndefinition}
 			
 			%In figura~\ref{fig:rappresent} è rappresentata di una generica stazione. 
-			In Figure ~\ref{fig:rappresent} is represented by a generic station.
-			%In particolare i cerchi con il numero romano rappresentano i binari di stazionamento, mentre gli altri rappresentano punti di ingresso o di uscita alla stazione.
-			In particular, the circles with the Roman numeral representing the tracks of the platform, while the others circles represent points of entry or exit of the station.
+			In Figure ~\ref{fig:rappresent} is represented by a generic layout of railway.
+			%In particolare i cerchi rappresentano i binari di stazionamento o punti di ingresso o di uscita alla stazione, il numero all'interno li identifica nella rete.
+			In particular, the circles representing the tracks of the platform or points of entry or exit of the station. The number inside the circle identifies them in the rail network.
+%			If into the circle is present a train the color of the circle is gray and the label of circle represent the name of train.
 			The segment that connects the two circles represents a track of railway line.
 			 %Il segmento che unisce i due cerchi rappresenta un tratto di linea ferroviaria. 
 			  %[Due cerchi uniti da un segmento, tutti di colore rosso, rappresentano un itinerario. ]
-			  [Two circles connected by a segment, all the same color, representing a route.]
-			 %Il cerchio è colorato quando è presente un treno. Colori diversi indicano treni diversi. Il colore della freccia indica direzione del treno.
-			The circle is coloured when a train is present. Different colors indicates different trains. The color of the arrow indicates the direction of the train.
+			  %[Two circles connected by a segment, all the same color, representing a route.]
+			 %Il cerchio è colorato quando è presente un treno. Colori diversi indicano treni diversi. 
+			The circle is coloured gray when a train is present. The label of circle represent the name of train. The mission of the train is represented with a vector of integers that identifies the itinerary of the train. In figure ~\ref{fig:rappresent} $t_1=\{2,4,6,5,3\}$ is the itinerary of the train red. If is present the dotted arrow indicates the direction of the train, however is always possible to deduce the direction of train from the itinerary.
 			
 			\begin{figure}[htp]
 				\begin{centering}	
-				\includegraphics[width=0.3\textwidth, clip]{img/rappresentazione}
-				\caption{Generic layout of a station}
+				\includegraphics[width=0.4\textwidth, clip]{img/rappresentazione}
+				\caption{Generic layout of railway}
 				\label{fig:rappresent}
 				\end{centering}
 			\end{figure}
@@ -187,24 +189,24 @@
 			
 			%Nella figura~\ref{fig:simpledeadlockpattern} sono disegnati i pattern di base.
 			In Figure~\ref{fig:simpledeadlockpattern} are represented the basic pattern.
-			
 			%Nel pattern di base~\ref{fig:lcrossdeadlock} è possibile vedere come entrambi i treni si blocchino a vicenda. Chiameremo questo genere di deadlock:  \emph{``linear deadlock''}. Per eliminare questo deadlock bisogna impedire ad uno dei due treni di entrare in questa sezione critica in direzione opposta. %In questa sezione i treni devo circolare tutti nella stessa direzione.
+			In the basic pattern~\ref{fig:lcrossdeadlock} is possible to see how both trains block each other. We will call this type of deadlock: \emph{``Linear Deadlock''}. To eliminate this deadlock must prevent one of the two trains to enter this critical area in the opposite direction. In this section, all trains must move in the same direction.
 			
-			In the basic pattern~\ref{fig:lcrossdeadlock} is possible to see how both trains block each other. We will call this type of deadlock: \emph{``linear deadlock''}. To eliminate this deadlock must prevent one of the two trains to enter this critical area in the opposite direction. In this section, all trains must move in the same direction.
+			%Nel pattern ~\ref{fig:circledeadlock} è raffigurato un ring dove tutti i treni impedisco l'uno l'altro di muoversi. Chiameremo questo genere di deadlock:  \emph{``circle deadlock''}. Per eliminare questo deadlock bisogna impedire che i treni che sono presenti nel ring siamo al massimo N-1. Dove N è la somma dei punti di ingresso o uscita e dei binari di una stazione. Nota: nei singoli segmenti del patter non devono essere presenti treni in direzione contrapposta. i treni  che si trovano al margine del ring e ne stanno uscendo sono ininfluenti
 			
-			%Nel pattern ~\ref{fig:circledeadlock} è raffigurata una stazione. Tutti i treni impedisco l'uno l'altro di muoversi. Chiameremo questo genere di deadlock:  \emph{``circle deadlock''}. Per eliminare questo deadlock bisogna impedire che i treni che sono presenti nel ring siamo al massimo N-1. Dove N è la somma dei punti di ingresso o uscita e dei binari di una stazione. Nota: nei singoli segmenti del patter non devono essere presenti treni in direzione contrapposta. i treni  che si trovano al margine del ring e ne stanno uscendo sono ininfluenti
-			
-			In pattern~\ref{fig:circledeadlock} is represented a circle. All trains block each other. We will call this type of deadlock:  \emph{``circle Deadlock''}. To eliminate this deadlock must prevent that the trains which are present in the circle are at most $N-1$. Where $N$ is the sum of the points of entry or exit and tracks platform of the station. Note: in the individual segments of this patter must not be present trains in the opposite direction. Note2: the trains that are located at the edge of the circle and they are coming out are irrelevant for the deadlocks.
+			In pattern~\ref{fig:circledeadlock} is represented a ring where all trains block each other. We will call this type of deadlock:  \emph{``Circle Deadlock''}. To eliminate this deadlock must prevent that the trains which are present in the ring are at most $N-1$. Where $N$ is the sum of the points of entry or exit and tracks platform of the station. Note: in the individual segments of this patter must not be present trains in the opposite direction. Note2: the trains that are located at the edge of the circle and they are coming out are irrelevant for the deadlocks.
 			
 			\begin{figure}[!htp]
 			 \centering
 			
 			 \subfloat[Linear Deadlock Pattern\label{fig:lcrossdeadlock}]{
-			 \includegraphics [scale=0.45, clip]{img/deadlinear}
+			% \includegraphics [scale=0.45, clip]{img/deadlinear}
+			\includegraphics [scale=0.55, clip]{img/alldead1}
 			 \label{fig:crossdeadlock}
 			 }
 			 \subfloat[Circle Deadlock Pattern\label{fig:lcircledeadlock}]{
-			 \includegraphics [scale=0.5, clip]{img/circledead}
+			 %\includegraphics [scale=0.5, clip]{img/circledead}
+			 \includegraphics [scale=0.55, clip]{img/alldead2}
 			 \label{fig:circledeadlock}
 			 }
 			 
@@ -263,29 +265,77 @@
 			
 			In Figure ~\ref{fig:circle2deadlock} shows two circle pattern. We have three critical areas. In the critical area one and two can circulate respectively $N-1$ trains, then three and three. While globally in the two circles can circulate $[(N-1) + (N-1)] - (M-1)=5$, where $M$ is the number of patterns, so maximum five trains may run in the main critical area.
 			
-			\section{Method overview}\label{sec:method}
-			\input{over}
+		
 			
 			\section{DeadLock Analysis}
-Di seguito analizzeremo il caso della metropolitana in figura~\ref{fig:example}. 
-Questo layout è quello usato per il progetto italiano Train Control Enhancement via Information Technology (TRACE-IT), project funded by the Tuscany Region under the programme PAR FAS 2007–2013, for the study of systems for railway signaling.
-%Dati il layout di una metropolitana e la tabella orario dei treni che si vogliono far circolare. Viene definito il modello delle missioni dei singoli treni. Il modello delle missioni unito al modello dello stato della linea formano il modello di scheduling del sistema. 
-
-			\begin{figure*}[htp]
+			
+			\begin{figure*}[htbp]
 				\begin{centering}	
-				\includegraphics[scale=0.5]{img/esempioG}
+				\includegraphics[scale=0.45]{img/esempioG}
 				\caption{Layout of the subway}
 				\label{fig:example}
 				\end{centering}
 			\end{figure*}
-
-		
-			Nel modello UMC ad ogni binario di stazione ed ad ogni punto di ingresso o d'uscita dalle stazioni viene associato un numero univoco nella rete ferroviaria, see figura~\ref{fig:example}.
-			Da una analisi preliminare del layout della metropolitana si possono già individuare facilmente alcune possibili aree critiche. Ma alcune di queste aree critiche potrebbero non essere mai interessate da situazioni di deadlock, perchè questo dipende anche dalle missioni dei treni. Prima di delimitare le aree critiche creami il modello di scheduling e analizziamolo con il model checker.
 			
-			Il modello di scheduling, see section~\ref{sec:method} è composto dalle missioni dei treni e tallo stato iniziale della linea metropolitana.
-			La missione del treno è rappresentata da un vettore che contiene la seguenza di tratte della linea (itinerari) per poter eseguire la missione, la posizione iniziale del treno e il Train Running Number\footnote{The train running number is a unique number used to identify a train on a specific mission.} (TRN) del treno see figure~\ref{fig:lmissionm}.
+Di seguito analizzeremo il caso della metropolitana in figura~\ref{fig:example}.
+I rettagoli trattegiati indicano la presenza di una stazione mentre il numero romano sul cerchio indica il numero del binario della stazione.
+Questo layout è quello usato per il progetto italiano Train Control Enhancement via Information Technology (TRACE-IT), project funded by the Tuscany Region under the programme PAR FAS 2007-2013, for the study of systems for railway signaling.
+Questo layout viene usato per creare un dimostratore reale e viene usato per l'analisi dei requisiti di un ATS in fase di sviluppo. 
+%Dati il layout di una metropolitana e la tabella orario dei treni che si vogliono far circolare. Viene definito il modello delle missioni dei singoli treni. Il modello delle missioni unito al modello dello stato della linea formano il modello di scheduling del sistema. 
+\begin{table}[htbp]
+\newcommand\T{\rule{0pt}{3ex}}
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}}
+\begin{centering}
+\begin{scriptsize}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\hline
+
+ \T \textbf{TRN}  & \textbf{Departure}  & \textbf{Destination} & \textbf{Transit for} \\
+
+\hline 
+\hline
+
+
+\T {\normalsize t\textsubscript{1}} & Accademia st-I& Victory park-I& {\scriptsize 1,3,4,6,7,9,11,13,15,20,23} \\
+\hline
+
+\T {\normalsize t\textsubscript{2}}  & Accademia st-II& Victory park-II& 2,3,4,6,8,9,10,13,15,20,24 \\
+\hline
+
+\T {\normalsize t\textsubscript{3}}  &Victory park-I&Accademia st-I& 23,22,17,18,11,9,8,6,5,3,1 \\
+\hline
+ 
+\T {\normalsize t\textsubscript{4}}  & Victory park-II&Accademia st-II& 24,22,17,18,11,9,8,6,5,3,2 \\
+\hline
+\T {\normalsize t\textsubscript{5}}  &Little st.-I&Victory park-III& 31,30,28,27,11,13,16,20,25 \\
+\hline
+\T {\normalsize t\textsubscript{6}}  & Little st.-II&Victory park-IV& 32,30,29,27,11,13,16,20,26 \\
+\hline
+\T {\normalsize t\textsubscript{7}}  & Victory park-III&Little st.-I&  25,22,17,18,12,27,29,30,31\\
+\hline
+\T {\normalsize t\textsubscript{8}}  & Victory park-IV& Little st.-II & 26,22,17,18,12,27,29,30,32\\
+\hline \hline
+\end{tabular}
+\end{scriptsize}
+%}
+\\[4pt]
+\end{centering}
+\caption{TimeTable}
+\label{tab:timetalbe}
+\end{table}
+
+Nella tabella~\ref{tab:timetalbe} è mostrata la tabella orario che vogliamo verificare non causi deadlock. Nella prima colonna sono presenti i nomi univoci dei treni chiamati Train Running Number\footnote{The train running number is a unique number used to identify a train on a specific mission.} (TRN), nella seconda colonna sono presenti le stazioni ed il binario di partenza, nella terza colonna le stazioni ed il binario di arrivo. Mentre nell'ultima colonna sono è presente il tragitto che il treno effettua sotto forma di vettore numero, che indica il punti che il treno attraversa.
+
+Da questa tabella vengono estratte le informazioni per costruire il modello di scheduling da passare alle fase successiva di analisi di deadlock, see section~\ref{sec:method}.
+			%Nel modello UMC ad ogni binario di stazione ed ad ogni punto di ingresso o d'uscita dalle stazioni viene associato un numero univoco nella rete ferroviaria, see figura~\ref{fig:example}.
+			%Da una analisi preliminare del layout della metropolitana si possono già individuare facilmente alcune possibili aree critiche. Ma alcune di queste aree critiche potrebbero non essere mai interessate da situazioni di deadlock, perchè questo dipende anche dalle missioni dei treni. Prima di delimitare le aree critiche creiamo il modello di scheduling e lo analizziamo con il model checker.
+			
+			Il modello di scheduling, see section~\ref{sec:method} è composto dalle missioni dei treni e dallo stato iniziale della linea metropolitana.
+			La missione del treno è rappresentata da un vettore che contiene la seguenza di tratte della linea (itinerari) per poter eseguire la missione, la posizione iniziale del treno e il Train Running Number (TRN) del treno, see figure~\ref{fig:lmissionm}, questa rapprensetazione è usata per il model checker UMC.
 			In questa simulazione vengono usati otto treni, posti agli estremi della linea ferroviaria. 
+			
+
 			
 			\begin{figure}[!htp]
 			 \centering
@@ -294,14 +344,14 @@ Questo layout è quello usato per il progetto italiano Train Control Enhancement
 			  \begin{minipage}{2.9in} 
 			\centering
 			%\begin{verbatim}
-			\verb+purple={1,3,4,6,7,9,11,13,15,20,23}; pos4=1; trn=1;+
-			\verb+blue={2,3,4,6,7,9,11,13,16,20,24}; pos2=2; trn=2;+
-			\verb+gold={23,22,17,18,12,9,8,6,5,3,1}; pos3=23; trn=3;+
-			\verb+red={24,22,17,18,12,9,8,6,5,3,2}; pos1=24; trn=4;+
-			\verb+yellow={31,30,28,27,11,13,16,20,25}; pos6=31; trn=5;+
-			\verb+green={25,22,17,18,12,27,29,30,31}; pos5=25; trn=6;+
-			\verb+pink={32,30,28,27,11,13,16,20,26}; pos6=32; trn=7;+
-			\verb+grey={25,22,17,18,12,27,29,30,32}; pos6=26; trn=8;+
+			\verb+t1={1,3,4,6,7,9,10,13,15,20,23}; posinit1=1; trn=t1;+
+			\verb+t2={2,3,4,6,8,9,10,13,15,20,24}; posinit2=2; trn=t2;+
+			\verb+t3={23,22,17,18,11,9,8,6,5,3,1}; posinit3=23; trn=t3;+
+			\verb+t4={24,22,17,18,11,9,8,6,5,3,2}; posinit4=24; trn=t4;+
+			\verb+t5={31,30,28,27,11,13,16,20,25}; posinit5=31; trn=t5;+
+			\verb+t6={32,30,29,27,11,13,16,20,26}; posinit6=32; trn=t6;+
+			\verb+t7={25,22,17,18,12,27,29,30,31}; posinit7=25; trn=t7;+
+			\verb+t8={26,22,17,18,12,27,29,30,32}; posinit8=26; trn=t8;+
 			%\end{verbatim}  
 			\end{minipage}%
 			  \end{footnotesize}  
@@ -324,21 +374,58 @@ Questo layout è quello usato per il progetto italiano Train Control Enhancement
 			
 			Lo stato iniziale della linea è rapprensentato tramite un vettore di $32$ posizioni, dove la posizione $i$ è libera se il valore è uguale a $0$. Mentre se diversa da $0$, rappresenta il numero del treno che occupa quella tratta, see figure~\ref{fig:lstateline}.
 	
-			
-		
-			\begin{figure}[htp]
-				\begin{centering}	
-				\includegraphics[scale=0.25]{img/esempioSplit}
-				\caption{Splitting railway}
+Con questi dati ora è possibile usare il model checker per verificare la presenza di deadlock.
+Naturalmente non è sempre vero che il model checker riesca a verificare il modello, questo perchè il livello di complessità  è del modello è troppo complesso ed il model checker non trova tutte le possibili soluzioni.
+Con questi è un modello cosi complesso il model cheker non riesce a calcolare tutti i possibili casi. Quindi è necessario dividere il modello in sotto-modelli più semplici da analizzare.
+Per poi ricomporre i risultati e verificare se l'intero modello è libero da deadlock.
+
+In generare per splittare un layout bisogna applicare una semplice regola: il grafo va diviso
+in sottoreti in prossimità dei singoli punti che connettono piu sottoreti, come i punti 9,27,6 o 30 della figura~\ref{fig:example}. Nella figura~\ref{fig:split} è rappresentata una possibile divisione in regioni del layout della metro.
+
+\begin{figure}[htp]
+			\begin{centering}	
+				\includegraphics[scale=0.25]{img/region}
+				\caption{Railway splitting in region}
 				\label{fig:split}
 				\end{centering}
 			\end{figure}	
+	
+			Il layout della metropolitana è diviso in regioni, per facilitare e velocizzare il processo di verifica della presenza di deadlock. Sono cosi facilmente individuabili tre possibili regioni in cui dividere la metropolitana. Nella figura~\ref{fig:split} mostra la divisione in regioni della metro.
+			Di seguito analizzaremo le tre regioni.~\ref{fig:scomposizione3}.
 			
+			
+				
+			
+%			\begin{figure}[htp]
+%				\begin{centering}	
+%				\includegraphics[scale=0.30]{img/esempioGinit}
+%				\caption{Initial state of subway}
+%				\label{fig:initialstate}
+%				\end{centering}
+%			\end{figure}
+			
+			
+%				\begin{figure}[htp]
+%				\begin{centering}	
+%				\includegraphics[scale=0.25]{img/esempioGCriticalArea}
+%				\caption{Several critical area}
+%				\label{fig:criticalarea}
+%				\end{centering}
+%			\end{figure}				
+			
+%			\begin{figure}[htp]
+%				\begin{centering}	
+%				\includegraphics[scale=0.25]{img/region}
+%				\caption{Railway splitting in region}
+%				\label{fig:split}
+%				\end{centering}
+%			\end{figure}	
+%			
 			
 			\begin{figure}[htp]
 				\begin{centering}	
 				\includegraphics[scale=0.35]{img/esempioScomp1}
-				\caption{Splitting railway}
+				\caption{Railway Region I}
 				\label{fig:scomposizione1}
 				\end{centering}
 			\end{figure}
@@ -347,7 +434,7 @@ Questo layout è quello usato per il progetto italiano Train Control Enhancement
 			\begin{figure}[htp]
 				\begin{centering}	
 				\includegraphics[scale=0.35]{img/esempioScomp2}
-				\caption{Splitting railway}
+				\caption{Railway Region II}
 				\label{fig:scomposizione2}
 				\end{centering}
 			\end{figure}
@@ -356,18 +443,21 @@ Questo layout è quello usato per il progetto italiano Train Control Enhancement
 			\begin{figure}[htp]
 				\begin{centering}	
 				\includegraphics[scale=0.35]{img/esempioScomp3}
-				\caption{Splitting railway}
+				\caption{Railway Region III}
 				\label{fig:scomposizione3}
 				\end{centering}
 			\end{figure}
 			
-			\begin{figure*}[htp]
-				\begin{centering}	
-				\includegraphics[scale=0.5]{img/esempiozone}
-				\caption{Layout with critical zone}
-				\label{fig:examplezone}
-				\end{centering}
-			\end{figure*}
+			
+			
+			
+%			\begin{figure*}[htp]
+%				\begin{centering}	
+%				\includegraphics[scale=0.5]{img/esempiozone}
+%				\caption{Layout with critical zone}
+%				\label{fig:examplezone}
+%				\end{centering}
+%			\end{figure*}
 			
 			
 			\begin{enumerate}
@@ -388,7 +478,11 @@ Questo layout è quello usato per il progetto italiano Train Control Enhancement
 			%\input{releted}
 			\section{Conclusion}
 			%\input{conclusion}
-			
+			\section{Future Work}
+			\begin{itemize}
+			\item Automazione nell'aggiunta dei vincoli nel modello
+			\item Ricomposizioni di regioni con aree critiche cosposte
+			\end{itemize}
 			
 			
 			\pagebreak
